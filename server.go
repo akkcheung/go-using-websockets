@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gorilla/websocket"
@@ -77,7 +78,7 @@ func main() {
 			output := ""
 
 			if len(todoList) > 0 {
-				output += "<span uk-icon='icon: check'></span>Current Todos:"
+				output += "<b><span uk-icon='icon: check'></span>Current Todos:</b>"
 			}
 
 			output += "<ol>"
@@ -91,7 +92,7 @@ func main() {
 			output += "</ol>"
 
 			if len(completeTodoList) > 0 {
-				output += "<h2>Complete Todos:</h2>"
+				output += "<b>Complete Todos:</b>"
 			}
 
 			output += "<ul>"
@@ -118,5 +119,10 @@ func main() {
 		http.ServeFile(w, r, "websockets.html")
 	})
 
-	http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5000"
+	}
+
+	http.ListenAndServe(":"+port, nil)
 }
